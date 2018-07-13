@@ -1,5 +1,5 @@
 <launch>
-       <node pkg="racecar_ws" type="safety.py" name="Safety Script"/>
-       <node pkg="racecar_ws" type="forward.py" name="Forward Script"/>
-       <node pkg="racecar_ws" type="wallfollow.py" name="WallFollow Script"/>
+       <node pkg="racecar_ws" type="safety.py" name="Safety Script Online"/>
+       <node pkg="racecar_ws" type="forward.py" name="Forward Script Online"/>
+       <node pkg="racecar_ws" type="wallfollow.py" name="WallFollow Script Online"/>
 </launch>
