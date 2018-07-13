@@ -1,0 +1,4 @@
+<launch>
+       <node pkg="racecar_ws" type="safety.py" name="Safety Script"/>
+       <node pkg="racecar_ws" type="forward.py" name="Forward Script"/>
+</launch>
