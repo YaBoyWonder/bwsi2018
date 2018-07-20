@@ -30,3 +30,6 @@ while True:
         
         
     cv2.imshow('masked', newImg)
+    
+  
+cv2.destroyAllWindows()
