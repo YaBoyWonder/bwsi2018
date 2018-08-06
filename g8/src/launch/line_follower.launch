@@ -1,0 +1,5 @@
+<launch>
+    <node name="state_machine" pkg="gr8-week3-team08" type="state_machine.py" respawn="false" output="screen"/>
+    <node name="line_follower" pkg="gr8-week3-team08" type="line_follower.py" respawn="false" output="screen"/>
+    <node name="cone_tracker" pkg="gr8-week3-team08" type="cone_tracker.py" respawn="false" output="screen"/>
+</launch>
