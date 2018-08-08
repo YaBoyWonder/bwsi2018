@@ -1,31 +1,3 @@
-///////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 2017, STEREOLABS.
-//
-// All rights reserved.
-//
-// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-// OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-// LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-///////////////////////////////////////////////////////////////////////////
-
-
-
-
-/****************************************************************************************************
- ** This sample is a wrapper for the ZED library in order to use the ZED Camera with ROS.          **
- ** A set of parameters can be specified in the launch file.                                       **
- ****************************************************************************************************/
-
 #include <csignal>
 #include <cstdio>
 #include <math.h>
@@ -242,20 +214,12 @@ namespace zed_wrapper {
             return R;
         }
 
-        /* \brief Test if a file exist
-         * \param name : the path to the file
-         */
+
         bool file_exist(const std::string& name) {
             struct stat buffer;
             return (stat(name.c_str(), &buffer) == 0);
         }
 
-        /* \brief Image to ros message conversion
-         * \param img : the image to publish
-         * \param encodingType : the sensor_msgs::image_encodings encoding type
-         * \param frameId : the id of the reference frame of the image
-         * \param t : the ros::Time to stamp the image
-         */
         sensor_msgs::ImagePtr imageToROSmsg(cv::Mat img, const std::string encodingType, std::string frameId, ros::Time t) {
             sensor_msgs::ImagePtr ptr = boost::make_shared<sensor_msgs::Image>();
             sensor_msgs::Image& imgMessage = *ptr;
@@ -264,13 +228,12 @@ namespace zed_wrapper {
             imgMessage.height = img.rows;
             imgMessage.width = img.cols;
             imgMessage.encoding = encodingType;
-            int num = 1; //for endianness detection
+            int num = 1; 
             imgMessage.is_bigendian = !(*(char *) &num == 1);
             imgMessage.step = img.cols * img.elemSize();
             size_t size = imgMessage.step * img.rows;
             imgMessage.data.resize(size);
             
-            // flip the frame vertically in case the camera mounted upside down
             if (flip_frame) {
                 cv::Mat dst;
                 cv::flip(img, dst, 0);
@@ -291,20 +254,13 @@ namespace zed_wrapper {
             return ptr;
         }
 
-        /* \brief Publish the pose of the camera with a ros Publisher
-         * \param base_transform : Transformation representing the camera pose from base frame
-         * \param pub_odom : the publisher object to use
-         * \param odom_frame_id : the id of the reference frame of the pose
-         * \param t : the ros::Time to stamp the image
-         */
         void publishOdom(tf2::Transform base_transform, ros::Publisher &pub_odom, string odom_frame_id, ros::Time t) {
             nav_msgs::Odometry odom;
             odom.header.stamp = t;
-            odom.header.frame_id = odom_frame_id; // odom_frame
-            odom.child_frame_id = base_frame_id; // base_frame
-            // conversion from Tranform to message
+            odom.header.frame_id = odom_frame_id; 
+            odom.child_frame_id = base_frame_id; 
             geometry_msgs::Transform base2 = tf2::toMsg(base_transform);
-            // Add all value in odometry message
+
             odom.pose.pose.position.x = base2.translation.x;
             odom.pose.pose.position.y = base2.translation.y;
             odom.pose.pose.position.z = base2.translation.z;
@@ -312,16 +268,10 @@ namespace zed_wrapper {
             odom.pose.pose.orientation.y = base2.rotation.y;
             odom.pose.pose.orientation.z = base2.rotation.z;
             odom.pose.pose.orientation.w = base2.rotation.w;
-            // Publish odometry message
+      
             pub_odom.publish(odom);
         }
 
-        /* \brief Publish the pose of the camera as a transformation
-         * \param base_transform : Transformation representing the camera pose from base frame
-         * \param trans_br : the TransformBroadcaster object to use
-         * \param odometry_transform_frame_id : the id of the transformation
-         * \param t : the ros::Time to stamp the image
-         */
         void publishTrackedFrame(tf2::Transform base_transform, tf2_ros::TransformBroadcaster &trans_br, string odometry_transform_frame_id, ros::Time t) {
             geometry_msgs::TransformStamped transformStamped;
             transformStamped.header.stamp = ros::Time::now();
