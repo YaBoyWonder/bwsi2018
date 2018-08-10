@@ -8,7 +8,7 @@
 </br>
 
 # Racecar
-RACECAR 2018 using <a href="http://www.ros.org/about-ros/">ROS</a>, <a href="https://opencv.org/">OpenCV</a>, and more
 
+MIT 2018 RACECAR. Features OpenCV vision, AR tracking, local potential field control, state machine, PID controllers, wall following, and more. ROS/Python.
 
 </div>
